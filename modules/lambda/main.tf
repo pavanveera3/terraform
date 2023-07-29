@@ -117,6 +117,29 @@ resource "aws_s3_bucket_notification" "bucket_notification" {
   }
 }
 
+
+data "aws_s3_bucket" "source" {
+  bucket = "github-tfstate-12345"
+}
+
+data "aws_s3_bucket" "destination" {
+  bucket = var.bucket_name
+}
+
+data  "aws_s3_object" "file" {
+  bucket = aws_s3_bucket.source.bucket
+  key = "sample_file.txt"
+}
+
+
+resource "aws_s3_object" "copy" {
+  bucket = data.aws_s3_bucket.destination.bucket
+  key = "sample_file.txt"
+  source_object_key = data.aws_s3_object.file.key
+}
+
+
+/*
 #resource "aws_s3_object" "sample_file" {
 #  depends_on   = [aws_s3_bucket_notification.bucket_notification]
 #  bucket = var.bucket_name
@@ -141,7 +164,7 @@ resource "aws_s3_bucket_copy_object" "copy_object" {
   destination_key    = aws_s3_bucket_object.destination_object.key
 }
 
-/*
+
 resource "aws_s3_bucket_object" "copy_object" {
   depends_on   = [aws_s3_bucket_notification.bucket_notification]
   bucket = var.bucket_name
