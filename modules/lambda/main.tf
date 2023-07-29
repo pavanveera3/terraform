@@ -132,7 +132,7 @@ resource "aws_s3_object" "tgt" {
 
   bucket = data.aws_s3_bucket.destination.bucket
   key    = each.value.key
-  source = data.aws_s3_bucket_object.source[each.key].id
+  source = data.aws_s3_objects.source[each.key].id
 }
 
 
