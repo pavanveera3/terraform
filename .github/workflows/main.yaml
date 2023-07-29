@@ -12,7 +12,7 @@ jobs:
     env:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      AWS_REGION: ${{ secrets.AWS_REGION}}
+      AWS_REGION: ${{ secrets.AWS_REGION }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -27,15 +27,16 @@ jobs:
         run: terraform init
 
       - name: Terraform Plan
+        if: ${{ github.event_name == 'push' }}
         id: plan
-        if: github.event_name == 'push'
         run: terraform plan -out=tfplan
         continue-on-error: true
-      
-      - name: Terraform plan status
-        if: steps.plan.outcome == 'failure'
-        run: exit 1
+
+      - name: Terraform Plan Status
+        if: ${{ failure() }}
+        run: echo "Terraform plan failed, check your code." && exit 1
 
       - name: Terraform Apply
-        if: github.ref == 'refs/head/main' &&  github.event_name == 'push'
+        if: ${{ github.ref == 'refs/heads/main' && github.event_name == 'push' }}
         run: terraform apply -auto-approve tfplan
+
