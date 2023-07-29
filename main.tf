@@ -19,7 +19,7 @@ provider "aws" {
     vpc_id    = var.vpc_id
     subnet_id = var.subnet_id
 }
-*/
+
 
 module "s3_bucket" {
   source = "./modules/s3"
@@ -27,7 +27,7 @@ module "s3_bucket" {
   region      = var.region
 }
 
-/*
+
 module "lambda_function" {
   source      = "./modules/lambda"
   region      = var.region
