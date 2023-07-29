@@ -126,13 +126,15 @@ data "aws_s3_bucket" "destination" {
   bucket = var.bucket_name
 }
 
-resource "aws_s3_bucket_object" "tgt" {
+
+resource "aws_s3_object" "tgt" {
   for_each = data.aws_s3_objects.source
 
-  bucket  = data.aws_s3_bucket.destination.bucket
-  key     = each.key
-  content = each.value.body
+  bucket = aws_s3_bucket.destination.bucket
+  key    = each.value.key
+  source = aws_s3_bucket_object.source[each.key].id
 }
+
 
 /*
 data  "aws_s3_object" "file" {
