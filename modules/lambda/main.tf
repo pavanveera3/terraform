@@ -130,9 +130,9 @@ data "aws_s3_bucket" "destination" {
 resource "aws_s3_object" "tgt" {
   for_each = data.aws_s3_objects.source
 
-  bucket = aws_s3_bucket.destination.bucket
+  bucket = data.aws_s3_bucket.destination.bucket
   key    = each.value.key
-  source = aws_s3_bucket_object.source[each.key].id
+  source = data.aws_s3_bucket_object.source[each.key].id
 }
 
 
