@@ -117,6 +117,15 @@ resource "aws_s3_bucket_notification" "bucket_notification" {
   }
 }
 
+
+resource "aws_s3_object_copy" "test" {
+  bucket = var.bucket_name
+  key    = "sample_file.txt"
+  source = "github-tfstate-12345/sample_file.txt"
+
+}
+
+/*
 data "aws_s3_objects" "source" {
   bucket = "github-tfstate-12345"
   prefix = "sample_file.txt"  # Replace with the desired key (path) of the source file
@@ -136,7 +145,6 @@ resource "aws_s3_object" "tgt" {
 }
 
 
-/*
 data  "aws_s3_object" "file" {
   bucket = data.aws_s3_bucket.source.bucket
   key = "sample_file.txt"
