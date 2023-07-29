@@ -117,17 +117,36 @@ resource "aws_s3_bucket_notification" "bucket_notification" {
   }
 }
 
-
-data "aws_s3_bucket" "source" {
+data "aws_s3_bucket_objects" "source" {
   bucket = "github-tfstate-12345"
+  prefix = "sample_file.txt"  # Replace with the desired key (path) of the source file
 }
+
+
 
 data "aws_s3_bucket" "destination" {
   bucket = var.bucket_name
 }
 
+
+data "aws_s3_bucket_object" "source" {
+  for_each = toset(data.aws_s3_bucket_objects.source.keys)
+
+  bucket = data.aws_s3_bucket_objects.source.bucket
+  key    = each.key
+}
+
+resource "aws_s3_bucket_object" "tgt" {
+  for_each = aws_s3_bucket_object.source
+
+  bucket  = aws_s3_bucket.destination.bucket
+  key     = each.key
+  content = each.value.body
+}
+
+/*
 data  "aws_s3_object" "file" {
-  bucket = aws_s3_bucket.source.bucket
+  bucket = data.aws_s3_bucket.source.bucket
   key = "sample_file.txt"
 }
 
@@ -139,7 +158,7 @@ resource "aws_s3_object" "copy" {
 }
 
 
-/*
+
 #resource "aws_s3_object" "sample_file" {
 #  depends_on   = [aws_s3_bucket_notification.bucket_notification]
 #  bucket = var.bucket_name
