@@ -117,9 +117,23 @@ resource "aws_s3_bucket_notification" "bucket_notification" {
   }
 }
 
-resource "aws_s3_object" "sample_file" {
+#resource "aws_s3_object" "sample_file" {
+#  depends_on   = [aws_s3_bucket_notification.bucket_notification]
+#  bucket = var.bucket_name
+#  key    = "sample_file.txt"
+#  source = "/home/vramidi/atask2/sample_file.txt"  # Replace with the local path to the sample_file.txt file
+#}
+
+
+resource "aws_s3_bucket_object" "copy_object" {
   depends_on   = [aws_s3_bucket_notification.bucket_notification]
   bucket = var.bucket_name
-  key    = "sample_file.txt"
-  source = "/home/vramidi/atask2/sample_file.txt"  # Replace with the local path to the sample_file.txt file
+  key    = "sample_file.txt"  # Replace with the desired key (path) for the copied file in the destination bucket
+
+  # Specify the source bucket and key for the file to copy
+  source_bucket = "github-tfstate-12345"
+  source_key    = "sample_file.txt"  # Replace with the key (path) of the file in the source bucket that you want to copy
+
+
+#  acl    = "private"  # Replace with the desired ACL for the copied file, e.g., "private", "public-read", etc.
 }
