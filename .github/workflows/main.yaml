@@ -40,3 +40,6 @@ jobs:
         if: ${{ github.ref == 'refs/heads/main' && github.event_name == 'push' }}
         run: terraform apply -auto-approve tfplan
 
+      - name: Terraform Destroy
+        if: ${{ github.ref == 'refs/heads/main' && github.event_name == 'push' }}  # Change the condition based on when you want to trigger the destroy
+        run: terraform destroy -auto-approve

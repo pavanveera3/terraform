@@ -11,8 +11,6 @@ backend "s3" {}
 provider "aws" {
   region = var.region
 }
-module "s3_bucket" {
-}
 
 /* module "sagemaker_domain" {
   source    = "./modules/sagemaker"
@@ -20,7 +18,7 @@ module "s3_bucket" {
     vpc_id    = var.vpc_id
     subnet_id = var.subnet_id
 }
-
+*/
 
 module "s3_bucket" {
   source = "./modules/s3"
@@ -28,7 +26,7 @@ module "s3_bucket" {
   region      = var.region
 }
 
-
+/*
 module "lambda_function" {
   source      = "./modules/lambda"
   region      = var.region
