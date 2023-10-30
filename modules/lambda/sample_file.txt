@@ -1,0 +1,7 @@
+hai 
+this is 
+a test
+file
+to check the 
+terraform script 
+Thanks
