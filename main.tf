@@ -84,3 +84,29 @@ module "lambda_function" {
  }
 
 
+ module "aws_grafana" {
+   source      = "./modules/aws_grafana"
+   region      = var.iot_region
+   user_id     = var.user_id
+   aws_grafana_workspace = var.aws_grafana_workspace
+   account_id=var.account_id
+ }
+
+module "vpc" {
+  source      = "./modules/vpc"
+  region      = var.region
+}
+
+module "grafana" {
+  source      = "./modules/grafana"
+  region      = var.region
+  vpc_id    =  module.vpc.vpc_id
+  subnet_id = module.vpc.subnet_id
+} 
+
+ module "role_iot_twinmaker" {
+   source      = "./modules/role_iot_twinmaker"
+   region      = var.iot_region
+   bucket_name = var.target_bucket_name
+   account_id=var.account_id
+ }
