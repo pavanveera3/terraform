@@ -117,7 +117,7 @@ resource "aws_iam_instance_profile" "demo-profile" {
 
 resource "aws_key_pair" "my_key_pair" {
   key_name   = "my-key-pair_1"  # Replace with your desired key name
-  public_key = file("/mnt/c/Users/ravikumar.bezawada/Desktop/MIS/my-key-pair.pub")
+  public_key = file("${path.module}/my-key-pair.pub")
 }
 
 
@@ -137,7 +137,7 @@ resource "aws_instance" "grafana_instance" {
   connection {
     type        = "ssh"
     user        = "ec2-user"
-    private_key = file("/mnt/c/Users/ravikumar.bezawada/Desktop/MIS/my-key-pair")
+    private_key = file("${path.module}/my-key-pair")
     host        = self.public_ip
   }
 
