@@ -67,6 +67,7 @@ module "lambda_function" {
    source      = "./modules/amplify"
    region      = var.region
  } 
+
 */
 
 
