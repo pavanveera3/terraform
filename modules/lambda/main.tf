@@ -133,8 +133,8 @@ resource "aws_s3_bucket_notification" "bucket_notification" {
 }
 
 resource "aws_s3_object" "sample_file" {
-  depends_on   = [null_resource.wait_for_lambda_trigger_1]
+    depends_on   = [aws_s3_bucket_notification.bucket_notification]
   bucket = var.bucket_name
   key    = "input/sample_file.txt"
-  source = "/home/vramidi/aws_complete/modules/lambda/sample_file.txt"  # Replace with the local path to the sample_file.txt file
+  source = "${path.module}/sample_file.txt"  # Replace with the local path to the sample_file.txt file
 }
