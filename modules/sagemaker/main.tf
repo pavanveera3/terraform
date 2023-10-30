@@ -14,6 +14,14 @@ variable "subnet_id" {
   description = "ID of the existing subnet."
 }
 
+variable "sagemaker_domain" {
+  description = "ID of the sagemaker Domain name."
+}
+
+variable "sagemaker_username" {
+  description = "User ID of the sagemaker Domain."
+}
+
 data "aws_vpc" "default" {
   id = var.vpc_id
 }
@@ -21,10 +29,6 @@ data "aws_vpc" "default" {
 data "aws_subnet" "default" {
   id = var.subnet_id
 }
-
-
-
-
 # IAM role for SageMaker access
 resource "aws_iam_role" "sagemaker_full_access" {
   name = "sagemaker_full_access"
@@ -72,7 +76,7 @@ resource "aws_iam_role_policy_attachment" "sagemaker_full_access_attachment" {
 
 # SageMaker domain
 resource "aws_sagemaker_domain" "my_domain" {
-  domain_name = "my-test-domain"
+  domain_name = var.sagemaker_domain #data.sg_domain.default.id
   auth_mode   = "IAM"
 
   default_user_settings {
@@ -85,8 +89,7 @@ resource "aws_sagemaker_domain" "my_domain" {
 
 # SageMaker user profile
 resource "aws_sagemaker_user_profile" "my_user_profile" {
-  user_profile_name = "my-user-profile"
+  user_profile_name = var.sagemaker_username #data.sg_username.default.id
   domain_id         = aws_sagemaker_domain.my_domain.id
 }
-
 
