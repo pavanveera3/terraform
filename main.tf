@@ -62,12 +62,12 @@ module "lambda_function" {
  }
 
 
-
+/*
  module "amplify" {
    source      = "./modules/amplify"
    region      = var.region
  } 
-
+*/
 
 
  module "athena" {
