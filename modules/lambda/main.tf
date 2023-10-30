@@ -2,6 +2,10 @@ provider "aws" {
   region = var.region
 }
 
+variable function_name{
+  description = "Lambda Function Name"
+}
+
 variable "region" {
   description = "AWS region where the resources will be created."
 }
@@ -62,6 +66,11 @@ resource "aws_iam_policy" "lambda_policy" {
         ]
         Effect   = "Allow"
         Resource = "arn:aws:logs:${var.region}:${var.account_id}:log-group:/aws/lambda/*"
+      },
+      {
+        Action   =  [ "iot:*", "iotjobsdata:*", "iotthingsgraph:*" , "iotsitewise:*" ]
+        Effect   = "Allow",
+        Resource = "*"
       }
     ]
   })
@@ -74,21 +83,26 @@ resource "aws_iam_role_policy_attachment" "lambda_policy_attachment" {
 }
 
 locals {
-  lambda_function_code = filebase64("${path.module}/index.py")
+  lambda_function_code = filebase64("${path.module}/env_index.py")
 }
 
 data "archive_file" "lambda_function_zip" {
   type        = "zip"
-  source_file = "${path.module}/index.py"
+  source_file = "${path.module}/env_index.py"
   output_path = "${path.module}/lambda_function.zip"
 }
 
 resource "aws_lambda_function" "lambda_function" {
   filename      = data.archive_file.lambda_function_zip.output_path
-  function_name = "lambda_function_name"
+  function_name = "${var.function_name}"
   role          = aws_iam_role.lambda_execution.arn
-  handler       = "index.lambda_handler"
+  handler       = "env_index.lambda_handler"
   runtime       = "python3.8"
+  environment {
+    variables = {
+      input_bucket_name = var.bucket_name
+    }
+  }
 }
 
 resource "aws_lambda_permission" "lambda_permission" {
@@ -102,12 +116,13 @@ resource "aws_lambda_permission" "lambda_permission" {
 resource "null_resource" "wait_for_lambda_trigger" {
   depends_on   = [aws_lambda_permission.lambda_permission]
   provisioner "local-exec" {
-    command = "sleep 10"
+    command = "sleep 30"
   }
 }
 
 
 resource "aws_s3_bucket_notification" "bucket_notification" {
+  depends_on   = [null_resource.wait_for_lambda_trigger]
   bucket = var.bucket_name
 
   lambda_function {
@@ -117,12 +132,9 @@ resource "aws_s3_bucket_notification" "bucket_notification" {
   }
 }
 
-
-resource "aws_s3_object_copy" "test" {
-  depends_on   = [aws_s3_bucket_notification.bucket_notification]
+resource "aws_s3_object" "sample_file" {
+  depends_on   = [null_resource.wait_for_lambda_trigger_1]
   bucket = var.bucket_name
-  key    = "sample_file.txt"
-  source = "github-tfstate-12345/sample_file.txt"
-
+  key    = "input/sample_file.txt"
+  source = "/home/vramidi/aws_complete/modules/lambda/sample_file.txt"  # Replace with the local path to the sample_file.txt file
 }
-
