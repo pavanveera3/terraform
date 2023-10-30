@@ -12,7 +12,13 @@ variable "bucket_name" {
 
 resource "aws_s3_bucket" "input_bucket" {
   bucket = var.bucket_name
+#  lifecycle {
+#    prevent_destroy = false
+#  }
+force_destroy=true
 }
+
+
 
 resource "aws_s3_bucket_public_access_block" "input_bucket_public_access_block" {
   bucket = aws_s3_bucket.input_bucket.bucket
@@ -22,4 +28,12 @@ resource "aws_s3_bucket_public_access_block" "input_bucket_public_access_block" 
   ignore_public_acls      = true
   restrict_public_buckets = true
 }
+/*
+resource "null_resource" "destroy_bucket" {
+  depends_on = [aws_s3_bucket.input_bucket]
 
+  provisioner "local-exec" {
+    command = "terraform destroy -force s3://${var.bucket_name}"
+    when = "destroy"
+  }
+}*/
