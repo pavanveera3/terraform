@@ -38,4 +38,48 @@ module "lambda_function" {
   function_name = var.function_name
 }
 
+ module "s3_buckets" {
+   source = "./modules/s3_buckets"
+   bucket_name = var.source_bucket_name
+   target_bucket_name = var.target_bucket_name
+   lambda_fun1=var.lambda_fun1
+   lambda_fun2=var.lambda_fun2
+   lambda_fun3=var.lambda_fun3
+   region      = var.region
+ }
+
+ module "cross_lambda" {
+   source = "./modules/cross_lambda"
+   bucket_arn = module.s3_buckets.source_id
+   target_bucket_arn = module.s3_buckets.target_id
+   bucket_name = var.source_bucket_name
+   target_bucket_name = var.target_bucket_name
+   lambda_fun1=var.lambda_fun1
+   lambda_fun2=var.lambda_fun2
+   lambda_fun3=var.lambda_fun3
+   region      = var.region
+   account_id=var.account_id
+ }
+
+
+
+ module "amplify" {
+   source      = "./modules/amplify"
+   region      = var.region
+ } 
+
+
+
+ module "athena" {
+   source      = "./modules/athena"
+   region      = var.region
+ }
+
+
+
+ module "cognito" {
+   source      = "./modules/cognito"
+   region      = var.region
+ }
+
 
