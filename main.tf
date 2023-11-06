@@ -11,6 +11,7 @@ backend "s3" {}
 provider "aws" {
   region = var.region
 }
+
 /*
 module "sagemaker_domain" {
   source    = "./modules/sagemaker"
