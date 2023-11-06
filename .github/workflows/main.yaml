@@ -99,14 +99,14 @@ jobs:
         if: ${{ github.ref == 'refs/heads/main' && github.event_name == 'push' }}
         run: terraform apply -auto-approve tfplan
         continue-on-error: true
-		
+
   terraform-destroy:
     name: "Terraform Destroy"
     runs-on: ubuntu-latest
     env:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-    needs: [terraform-plan]
+    needs: [terraform-apply]
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
