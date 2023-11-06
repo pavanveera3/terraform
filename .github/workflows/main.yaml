@@ -27,7 +27,7 @@ jobs:
 
       - name: Terraform Init
         id: init
-        run: terraform init -backend-config="bucket=${{secrets.AWS_BUCKET_NAME}}" -backend-config="key=${{secrets.AWS_BUCKET_KEY_NAME}}" -backend-config="region=${AWS_REGION}"
+        run: terraform init -backend-config="bucket=${{secrets.AWS_BUCKET_NAME}}" -backend-config="key=${{secrets.AWS_BUCKET_KEY_NAME}}" -backend-config="region=${{secrets.AWS_REGION}}"
 
   terraform-plan:
     name: "Terraform Plan"
@@ -44,7 +44,7 @@ jobs:
 
       - name: Terraform Init
         id: init
-        run: terraform init -backend-config="bucket=${{secrets.AWS_BUCKET_NAME}}" -backend-config="key=${{secrets.AWS_BUCKET_KEY_NAME}}" -backend-config="region=${AWS_REGION}"
+        run: terraform init -backend-config="bucket=${{secrets.AWS_BUCKET_NAME}}" -backend-config="key=${{secrets.AWS_BUCKET_KEY_NAME}}" -backend-config="region=${{secrets.AWS_REGION}}"
 
       - name: Terraform Plan
         if: ${{ github.event_name == 'push' }}
@@ -71,7 +71,7 @@ jobs:
 
       - name: Terraform Init
         id: init
-        run: terraform init -backend-config="bucket=${{secrets.AWS_BUCKET_NAME}}" -backend-config="key=${{secrets.AWS_BUCKET_KEY_NAME}}" -backend-config="region=${AWS_REGION}"
+        run: terraform init -backend-config="bucket=${{secrets.AWS_BUCKET_NAME}}" -backend-config="key=${{secrets.AWS_BUCKET_KEY_NAME}}" -backend-config="region=${{secrets.AWS_REGION}}"
 
       - name: Terraform Apply
         if: ${{ github.ref == 'refs/heads/main' && github.event_name == 'push' }}
@@ -93,7 +93,7 @@ jobs:
 
       - name: Terraform Init
         id: init
-        run: terraform init -backend-config="bucket=${{secrets.AWS_BUCKET_NAME}}" -backend-config="key=${{secrets.AWS_BUCKET_KEY_NAME}}" -backend-config="region=${AWS_REGION}"
+        run: terraform init -backend-config="bucket=${{secrets.AWS_BUCKET_NAME}}" -backend-config="key=${{secrets.AWS_BUCKET_KEY_NAME}}" -backend-config="region=${{secrets.AWS_REGION}}"
 
       - name: Terraform Destroy
         if: ${{ github.ref == 'refs/heads/main' && github.event_name == 'push' }}  # Change the condition based on when you want to trigger the destroy
