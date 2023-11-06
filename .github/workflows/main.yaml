@@ -1,24 +1,9 @@
 name: "First Test"
 
 on:
-   workflow_dispatch:
-     inputs:
-        environment:
-         description: 'Environment to run tests against' 
-         type: environment 
-         required: true
-        version:
-         description: 'Version Number'
-         required: false
-#   push: 
-#     branches:
-#       - main
-#   pull_request:
-
-#on:
-#  push:
-#    branches:
-#      - main
+  push:
+    branches:
+      - main
 
 jobs:
   terraform:
