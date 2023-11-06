@@ -12,7 +12,7 @@ provider "aws" {
   region = var.region
 }
 
-/*
+
 module "sagemaker_domain" {
   source    = "./modules/sagemaker"
     region    = var.region
@@ -38,7 +38,7 @@ module "lambda_function" {
   bucket_name = var.bucket_name
   function_name = var.function_name
 }
-*/
+
  module "s3_buckets" {
    source = "./modules/s3_buckets"
    bucket_name = var.source_bucket_name
@@ -68,7 +68,7 @@ module "lambda_function" {
    source      = "./modules/amplify"
    region      = var.region
  } 
-
+*/
 
 
 
@@ -111,4 +111,3 @@ module "grafana" {
    bucket_name = var.target_bucket_name
    account_id=var.account_id
  }
-*/
