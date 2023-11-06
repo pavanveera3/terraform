@@ -120,6 +120,9 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: tfplan
+
+      - name: Terraform Init
+        run: terraform init -reconfigure
   
       - name: Terraform Destroy
         if: ${{ github.ref == 'refs/heads/main' && github.event_name == 'push' }}
