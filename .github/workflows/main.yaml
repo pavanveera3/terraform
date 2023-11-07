@@ -96,6 +96,13 @@ jobs:
         with:
           name: tfplan
 
+      - name: Create Zip Archive
+        run: |
+           zip -r modules/cross_lambda/lambda_function.zip modules/cross_lambda/env_index.py
+           zip -r modules/cross_lambda/lambda_function_1.zip modules/cross_lambda/env_index.py
+           zip -r modules/cross_lambda/lambda_function_2.zip modules/cross_lambda/env_index.py
+           
+
 
       - name: Terraform Apply
         if: ${{ github.ref == 'refs/heads/main' && github.event_name == 'push' }}
